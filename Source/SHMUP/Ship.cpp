@@ -9,6 +9,7 @@ AShip::AShip()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 	CoreMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CoreMesh"));
 	SetRootComponent(CoreMesh);
 
@@ -35,7 +36,7 @@ void AShip::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	FVector MovementDirection = ConsumeMovementInputVector();
-	AddActorLocalOffset(MovementDirection);
+	AddActorLocalOffset(MovementDirection, true);
 }
 
 // Called to bind functionality to input
