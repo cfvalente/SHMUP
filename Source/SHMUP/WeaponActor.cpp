@@ -17,6 +17,8 @@ AWeaponActor::AWeaponActor()
 
 	DirectionArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("DirectionArrow"));
 	DirectionArrow->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	ClassType = ESubsystemEnum::VE_Weapon;
 }
 
 // Called when the game starts or when spawned
@@ -34,14 +36,13 @@ void AWeaponActor::Fire()
 	{
 		LastShotTime = ShotTime;
 
-		//Sem verificar transform
 		if (UseMuzzleLocation)
 		{
 			for (int32 i = 0; i < BulletTypes.Num(); i++)
 			{
 				if (BulletTypes[i] != nullptr)
 				{
-					GetWorld()->SpawnActor<ABullet>(BulletTypes[i], MuzzleTransform, FActorSpawnParameters::FActorSpawnParameters());
+					GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform()+MuzzleTransform, FActorSpawnParameters::FActorSpawnParameters());
 				}
 			}
 		}
@@ -53,7 +54,7 @@ void AWeaponActor::Fire()
 				{
 					if (BulletTypes[i] != nullptr)
 					{
-						GetWorld()->SpawnActor<ABullet>(BulletTypes[i], BulletCustomSpawnTransform[i], FActorSpawnParameters::FActorSpawnParameters());
+						GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform() + BulletCustomSpawnTransform[i], FActorSpawnParameters::FActorSpawnParameters());
 					}
 				}
 			}

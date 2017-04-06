@@ -38,8 +38,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Components")
 	UCameraComponent *Camera = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Weapon")
+	TArray<class AWeaponActor *> MainWeaponSubsystem;
+
 private:
 	FVector Forward, Right;
+
+	void ParseChildActors();
+
+	void IgnoreCollisionWithChildActors();
 
 public:	
 	// Called every frame
@@ -54,4 +61,6 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Movement")
 	virtual void MoveRight(float Intensity);
 	
+	UFUNCTION(BlueprintCallable, category = "Weapon")
+	virtual void Fire();
 };

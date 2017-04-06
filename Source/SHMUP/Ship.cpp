@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SHMUP.h"
+#include "SubsystemActor.h"
+#include "WeaponActor.h"
 #include "Ship.h"
 
 
@@ -28,6 +30,46 @@ void AShip::BeginPlay()
 	Super::BeginPlay();
 	Forward = GetActorForwardVector();
 	Right = GetActorRightVector();
+
+	ParseChildActors();
+	IgnoreCollisionWithChildActors();
+}
+
+void AShip::ParseChildActors()
+{
+	TArray<AActor *> ChildActors;
+	this->GetAllChildActors(ChildActors);
+	for (int32 i = 0; i < ChildActors.Num(); i++)
+	{
+		ASubsystemActor *SubsystemActor = nullptr;
+		SubsystemActor = Cast<ASubsystemActor>(ChildActors[i]);
+		if (SubsystemActor != nullptr)
+		{
+			AWeaponActor *WeaponActor = nullptr;
+			switch (SubsystemActor->GetSubsystemType())
+			{
+			case ESubsystemEnum::VE_Weapon:
+				WeaponActor = Cast<AWeaponActor>(SubsystemActor);
+				if (WeaponActor != nullptr)
+				{
+					MainWeaponSubsystem.Add(WeaponActor);
+				}
+				break;
+			case ESubsystemEnum::VE_Misc:
+				break;
+			case ESubsystemEnum::VE_None:
+				break;
+			}
+		}
+	}
+}
+
+void AShip::IgnoreCollisionWithChildActors()
+{
+	for (int32 i = 0; i < MainWeaponSubsystem.Num(); i++)
+	{
+		MoveIgnoreActorAdd(MainWeaponSubsystem[i]);
+	}
 }
 
 // Called every frame
@@ -36,6 +78,7 @@ void AShip::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	FVector MovementDirection = ConsumeMovementInputVector();
+	
 	AddActorLocalOffset(MovementDirection, true);
 }
 
@@ -56,3 +99,12 @@ void AShip::MoveRight(float Intensity)
 {
 	AddMovementInput(Right, MaxLateralSpeed * Intensity *GetWorld()->GetDeltaSeconds());
 }
+
+void AShip::Fire()
+{
+	for (int32 i = 0; i < MainWeaponSubsystem.Num(); i++)
+	{
+		MainWeaponSubsystem[i]->Fire();
+	}
+}
+

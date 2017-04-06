@@ -3,10 +3,11 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "SubsystemActor.h"
 #include "WeaponActor.generated.h"
 
 UCLASS()
-class SHMUP_API AWeaponActor : public AActor
+class SHMUP_API AWeaponActor : public ASubsystemActor
 {
 	GENERATED_BODY()
 	
@@ -37,7 +38,7 @@ protected:
 	bool UseMuzzleLocation = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Weapon")
-	float LastShotTime = 0.0f;
+	float LastShotTime = -999.999f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Weapon")
 	FTransform MuzzleTransform;
