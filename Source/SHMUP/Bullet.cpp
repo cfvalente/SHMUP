@@ -26,6 +26,8 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Forward = GetActorForwardVector();
 	Fire();
 }
 
@@ -36,8 +38,10 @@ void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	AddActorLocalOffset(Forward * DeltaTime * MaxForwardSpeed, true);
 }
 
+// Activate particle effects
 void ABullet::Fire()
 {
 }
