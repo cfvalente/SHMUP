@@ -30,13 +30,13 @@ protected:
 	float MaxForwardSpeed = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	UStaticMeshComponent *CoreMesh;
+	UStaticMeshComponent *CoreMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	class UArrowComponent *DirectionArrow;
+	class UArrowComponent *DirectionArrow = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Components")
-	UCameraComponent *Camera;
+	UCameraComponent *Camera = nullptr;
 
 private:
 	FVector Forward, Right;

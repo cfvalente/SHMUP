@@ -30,19 +30,19 @@ protected:
 	virtual void Reposition();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	UStaticMeshComponent *TerrainMesh;
+	UStaticMeshComponent *TerrainMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	class UArrowComponent *FrontArrow;
+	class UArrowComponent *FrontArrow = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	class UArrowComponent *BackArrow;
+	class UArrowComponent *BackArrow = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	class UBoxComponent *CreateNewTileTrigger;
+	class UBoxComponent *CreateNewTileTrigger = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Components")
-	class UBoxComponent *DestroyCurrentTileTrigger;
+	class UBoxComponent *DestroyCurrentTileTrigger = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Statistics")
 	FVector MovementDirection;
