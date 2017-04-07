@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SHMUP.h"
+#include "Ship.h"
 #include "Bullet.h"
 
 
@@ -12,14 +13,17 @@ ABullet::ABullet()
 
 
 	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletMesh"));
+	BulletMesh->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
+	BulletMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	BulletMesh->SetCollisionProfileName("OverlapAllDynamic");
 	SetRootComponent(BulletMesh);
 	
 	DirectionArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("DirectionArrow"));
 	DirectionArrow->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	Particles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particles"));
-	//Particles->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	BulletMesh->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
+	Particles->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	
 }
 
 // Called when the game starts or when spawned
@@ -28,7 +32,8 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 
 	Forward = GetActorForwardVector();
-	Fire();
+	Owner = GetOwner();
+	//if (Owner != nullptr) UE_LOG(LogTemp, Warning, TEXT("Parent's Name: %s"), *GetOwner()->GetFName().ToString());
 }
 
 
@@ -41,12 +46,16 @@ void ABullet::Tick(float DeltaTime)
 	AddActorLocalOffset(Forward * DeltaTime * MaxForwardSpeed, true);
 }
 
-// Activate particle effects
-void ABullet::Fire()
-{
-}
 
 void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("OtherActor's Name: %s"), *OtherActor->GetFName().ToString());
+	if (Owner != nullptr && Owner != OtherActor)
+	{
+		AShip *Ship;
+		Ship = Cast<AShip>(OtherActor);
+		if (Ship != nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OtherActor's Name: %s"), *OtherActor->GetFName().ToString());
+		}
+	}
 }

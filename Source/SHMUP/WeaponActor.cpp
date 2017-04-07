@@ -42,7 +42,9 @@ void AWeaponActor::Fire()
 			{
 				if (BulletTypes[i] != nullptr)
 				{
-					GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform()+MuzzleTransform, FActorSpawnParameters::FActorSpawnParameters());
+					FActorSpawnParameters params;
+					params.Owner = GetParentActor();
+					GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform()+MuzzleTransform, params);
 				}
 			}
 		}
@@ -54,7 +56,9 @@ void AWeaponActor::Fire()
 				{
 					if (BulletTypes[i] != nullptr)
 					{
-						GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform() + BulletCustomSpawnTransform[i], FActorSpawnParameters::FActorSpawnParameters());
+						FActorSpawnParameters params;
+						params.Owner = GetParentActor();
+						GetWorld()->SpawnActor<ABullet>(BulletTypes[i], GetTransform() + BulletCustomSpawnTransform[i], params);
 					}
 				}
 			}
