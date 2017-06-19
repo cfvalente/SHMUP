@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Statistics")
-	float health;
+	float Health;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Statistics")
 	float MaxLateralSpeed = 0;
@@ -41,12 +41,19 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, category = "Weapon")
 	TArray<class AWeaponActor *> MainWeaponSubsystem;
 
+	UFUNCTION(BlueprintCallable, category = "Damage")
+	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser);
+
 private:
 	FVector Forward, Right;
 
 	void ParseChildActors();
 
+	void SetPlayerShip();
+
 	void IgnoreCollisionWithChildActors();
+
+	bool PlayerShip = false;
 
 public:	
 	// Called every frame

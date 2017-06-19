@@ -33,7 +33,15 @@ void ABullet::BeginPlay()
 
 	Forward = GetActorForwardVector();
 	Owner = GetOwner();
-	//if (Owner != nullptr) UE_LOG(LogTemp, Warning, TEXT("Parent's Name: %s"), *GetOwner()->GetFName().ToString());
+	if (Owner != nullptr)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("Parent's Name: %s"), *GetOwner()->GetFName().ToString());
+		if (UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn() == Owner)
+		{
+			PlayerBullet = true;
+			//UE_LOG(LogTemp, Warning, TEXT("Ok!"));
+		}
+	}
 }
 
 
@@ -56,6 +64,8 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 		if (Ship != nullptr)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("OtherActor's Name: %s"), *OtherActor->GetFName().ToString());
+			UGameplayStatics::ApplyDamage(Ship, Damage, nullptr, this, UDamageType::StaticClass());
+			Destroy();
 		}
 	}
 }

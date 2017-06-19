@@ -31,6 +31,7 @@ void AShip::BeginPlay()
 	Forward = GetActorForwardVector();
 	Right = GetActorRightVector();
 
+	SetPlayerShip();
 	ParseChildActors();
 	IgnoreCollisionWithChildActors();
 }
@@ -61,6 +62,14 @@ void AShip::ParseChildActors()
 				break;
 			}
 		}
+	}
+}
+
+void AShip::SetPlayerShip()
+{
+	if (UGameplayStatics::GetPlayerController(GetWorld(), 0) == GetController())
+	{
+		PlayerShip = true;
 	}
 }
 
@@ -106,5 +115,17 @@ void AShip::Fire()
 	{
 		MainWeaponSubsystem[i]->Fire();
 	}
+}
+
+float AShip::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
+{
+	Health -= Damage;
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), Health);
+	if (Health <= 0.0f)
+	{
+		Destroy();
+		// Dead
+	}
+	return Damage;
 }
 
